@@ -51,5 +51,38 @@ CREATE TABLE `Papers` (
      PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+CREATE TABLE `Answers` (
+    `id` int(11) NOT NULL AUTO_INCREMENT ,
+    `question_id` int(11) NOT NULL ,
+    `test_id` int(11) NOT NULL,
+    `student_id` int(11) NOT NULL,
+    `start_time` time NOT NULL,
+    `end_time` time NOT NULL,
+    `stu_answer_content` varchar(255) NOT NULL ,
+    `answer_content` varchar(255) NOT NULL ,
+    `score` int(11) NOT NULL,
+    `status` smallint(3) NOT NULL,
+    `get_score` int(11) default 0 NOT NULL,
+    `time` int(11) NOT NULL,
+    PRIMARY KEY (`id`)
 
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
+CREATE TABLE `Questions` (
+     `id` int(11) NOT NULL AUTO_INCREMENT ,
+     `question_describe` text NOT NULL ,
+     `type` varchar(255) NOT NULL ,
+     `answer_content` varchar(255) NOT NULL ,
+     `other_answer` varchar(255) NOT NULL ,
+     `disorder` tinyint(1) NOT NULL,
+     `key` text not null ,
+     `source` tinyint(1) not null ,
+     PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `Keywords` (
+    `id` int(11) NOT NULL AUTO_INCREMENT ,
+    `key` varchar(233) not null ,
+    PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
