@@ -1,9 +1,12 @@
 package com.shardingspherejdbc.mybatisplus.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +20,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@TableName(value = "Classes")
 public class Classes implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,6 +29,8 @@ public class Classes implements Serializable {
     private Integer classId;
     private String className;
     private Integer teacherId;
+    @TableField(value = "createdAt")
     private Date createdAt;
+    @TableField(value = "updatedAt")
     private Date updatedAt;
 }

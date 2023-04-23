@@ -1,6 +1,7 @@
 package com.shardingspherejdbc.mybatisplus.controller;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author 
  * @since 2023-04-23
  */
-@RestController
+@Controller
 @RequestMapping("/classes")
 public class ClassesController {
 
@@ -32,7 +33,6 @@ public class ClassesController {
         if (pageSize == null) {
             pageSize = 10;
         }
-//        System.out.println();
         Page<Classes> aPage = iClassesService.page(new Page<>(current, pageSize));
         return new ResponseEntity<>(aPage, HttpStatus.OK);
     }
