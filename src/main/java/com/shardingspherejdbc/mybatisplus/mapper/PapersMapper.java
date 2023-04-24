@@ -1,6 +1,6 @@
 package com.shardingspherejdbc.mybatisplus.mapper;
 
-import com.shardingspherejdbc.mybatisplus.entity.Classes;
+import com.shardingspherejdbc.mybatisplus.entity.Papers;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author 
  * @since 2023-04-24
  */
-public interface ClassesMapper extends BaseMapper<Classes> {
+public interface PapersMapper extends BaseMapper<Papers> {
 
 }

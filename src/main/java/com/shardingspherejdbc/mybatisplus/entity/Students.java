@@ -16,12 +16,13 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Classes implements Serializable {
+public class Students implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    private Integer classId;
-    private String className;
-    private Integer teacherId;
+    private Integer studentId;
+    private String studentName;
+    private String openId;
+    private String studentTel;
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shardingspherejdbc.mybatisplus.mapper.QuestionsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.shardingspherejdbc.mybatisplus.entity.Questions">
+        <id column="id" property="id" />
+        <result column="question_describe" property="questionDescribe" />
+        <result column="type" property="type" />
+        <result column="answer_content" property="answerContent" />
+        <result column="other_answer" property="otherAnswer" />
+        <result column="disorder" property="disorder" />
+        <result column="key" property="key" />
+        <result column="source" property="source" />
+    </resultMap>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, question_describe, type, answer_content, other_answer, disorder, key, source
+    </sql>
+
+</mapper>

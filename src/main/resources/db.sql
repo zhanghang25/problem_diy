@@ -1,19 +1,12 @@
-CREATE TABLE `Counters` (
-    `id` int(11) NOT NULL AUTO_INCREMENT, `count` int(11) NOT NULL DEFAULT '1', `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
-CREATE TABLE `Classes` (
+CREATE TABLE `classes` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `class_id` int(11) NOT NULL,
     `class_name` varchar(255) NOT NULL,
     `teacher_id` int(11) NOT NULL,
-    `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `Students` (
+CREATE TABLE `students` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `student_id` int(11) NOT NULL,
     `student_name` varchar(255) NOT NULL,
@@ -22,7 +15,7 @@ CREATE TABLE `Students` (
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `Teachers` (
+CREATE TABLE `teachers` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `teacher_id` int(11) NOT NULL,
     `teacher_name` varchar(255) NOT NULL,
@@ -31,14 +24,14 @@ CREATE TABLE `Teachers` (
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `StudentClass` (
+CREATE TABLE `studentClass` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `student_id` int(11) NOT NULL ,
     `class_id` int(11) NOT NULL,
      PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*分割*/
-CREATE TABLE `Papers` (
+CREATE TABLE `papers` (
      `id` int(11) NOT NULL AUTO_INCREMENT,
      `test_id` int(11) NOT NULL,
      `test_name` varchar(255) NOT NULL ,
@@ -47,11 +40,11 @@ CREATE TABLE `Papers` (
      `teacher_id` int(11)  NOT NULL,
      `class_id` int(11)    NOT NULL,
      `status_id` SMALLINT(3) NOT NULL,
-     `time` int(11) NOT NULL
+     `time` int(11) NOT NULL,
      PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `Answers` (
+CREATE TABLE `answers` (
     `id` int(11) NOT NULL AUTO_INCREMENT ,
     `question_id` int(11) NOT NULL ,
     `test_id` int(11) NOT NULL,
@@ -68,7 +61,7 @@ CREATE TABLE `Answers` (
 
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `Questions` (
+CREATE TABLE `questions` (
      `id` int(11) NOT NULL AUTO_INCREMENT ,
      `question_describe` text NOT NULL ,
      `type` varchar(255) NOT NULL ,
@@ -80,7 +73,7 @@ CREATE TABLE `Questions` (
      PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
-CREATE TABLE `Keywords` (
+CREATE TABLE `keywords` (
     `id` int(11) NOT NULL AUTO_INCREMENT ,
     `key` varchar(233) not null ,
     PRIMARY KEY (`id`)

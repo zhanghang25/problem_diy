@@ -1,6 +1,6 @@
 package com.shardingspherejdbc.mybatisplus.service;
 
-import com.shardingspherejdbc.mybatisplus.entity.Classes;
+import com.shardingspherejdbc.mybatisplus.entity.Students;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author 
  * @since 2023-04-24
  */
-public interface IClassesService extends IService<Classes> {
+public interface IStudentsService extends IService<Students> {
 
 }
