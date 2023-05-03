@@ -62,6 +62,8 @@ public class TeachersController {
             return new ResponseEntity<>("已经注册过了", HttpStatus.OK);
 
         }
+        System.out.println(headers.get("x-wx-openid"));
+        System.out.println(headers);
         params.setOpenId(headers.get("x-wx-openid"));
 
         iTeachersService.save(params);
