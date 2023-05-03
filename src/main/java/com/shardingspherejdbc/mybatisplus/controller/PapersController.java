@@ -1,5 +1,6 @@
 package com.shardingspherejdbc.mybatisplus.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,15 @@ public class PapersController {
     @PostMapping(value = "/update")
     public ResponseEntity<Object> update(@RequestBody Papers params) {
         iPapersService.updateById(params);
+        return new ResponseEntity<>("updated successfully", HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/updateBatch")
+    public ResponseEntity<Object> updateBatch(@RequestBody Papers params) {
+        QueryWrapper<Papers> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(Papers::getTestId,params.getTestId());
+        iPapersService.update(params,wrapper);
+//        iPapersService.updateById(params);
         return new ResponseEntity<>("updated successfully", HttpStatus.OK);
     }
 }

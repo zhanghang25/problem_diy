@@ -18,8 +18,16 @@ import lombok.Setter;
 @Setter
 public class Keywords implements Serializable {
 
+
+    public Keywords(String key){
+        this.keywords = key;
+    }
+
+    public Keywords(){
+
+    }
     private static final long serialVersionUID = 1L;
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    private String key;
+    private String keywords;
 }

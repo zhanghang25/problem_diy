@@ -8,11 +8,11 @@ services:
       - .:/app
     ports:
       - '27081:8080'
-    container_name: wxcloud_wxcloudrun-springboot-main
+    container_name: wxcloud_problem-diy
     labels:
       - wxPort=27082
       - hostPort=27081
-      - wxcloud=wxcloudrun-springboot-main
+      - wxcloud=problem-diy
       - role=container
     environment:
       - MYSQL_USERNAME=

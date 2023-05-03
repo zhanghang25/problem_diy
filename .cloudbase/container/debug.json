@@ -1,44 +1,28 @@
 {
   "containers": [
     {
-      "name": "wxcloudrun-springboot-main",
+      "name": "problem-diy",
       "domain": "",
       "ip": "",
       "mode": "compose",
-      "containerId": "b4b5f499a130245a8f039c6e177063788c4da1c1dc7a06c7c0d71aa7eab570de"
+      "containerId": "b100fc1d640c20c745e7b67f451fcd1e90fcd8abe7ffa4d08f6656b38b371a7e"
     }
   ],
   "config": {
-    "wxcloudrun-springboot-main": {
-      "containerPort": 80,
+    "problem-diy": {
+      "remark": "",
+      "dockerfilePath": "Dockerfile",
+      "buildDir": "",
       "minNum": 0,
-      "maxNum": 5,
-      "cpu": 1,
-      "mem": 2,
+      "maxNum": 50,
+      "cpu": 0.5,
+      "mem": 1,
       "policyType": "cpu",
-      "policyThreshold": 50,
-      "policyDetails": [
-        {
-          "PolicyType": "cpu",
-          "PolicyThreshold": 50
-        },
-        {
-          "PolicyType": "mem",
-          "PolicyThreshold": 50
-        }
-      ],
-      "envParams": {
-        "MYSQL_USERNAME": "",
-        "MYSQL_PASSWORD": "",
-        "MYSQL_ADDRESS": ""
-      },
+      "policyThreshold": 60,
+      "envParams": {},
       "customLogs": "stdout",
-      "dataBaseName": "springboot_demo",
-      "executeSQLs": [
-        "CREATE DATABASE IF NOT EXISTS springboot_demo;",
-        "USE springboot_demo;",
-        "CREATE TABLE IF NOT EXISTS `Counters` (`id` int(11) NOT NULL AUTO_INCREMENT, `count` int(11) NOT NULL DEFAULT 1, `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, `updatedAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`id`)) ENGINE = InnoDB DEFAULT CHARSET = utf8;"
-      ]
+      "containerPort": 8080,
+      "initialDelaySeconds": 2
     }
   }
 }

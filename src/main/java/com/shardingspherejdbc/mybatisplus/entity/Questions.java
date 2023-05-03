@@ -25,7 +25,8 @@ public class Questions implements Serializable {
     private String type;
     private String answerContent;
     private String otherAnswer;
-    private Boolean disorder;
-    private String key;
-    private Boolean source;
+    private String disorder;
+    private String keywords;
+    private String source;
+    private Integer score;
 }

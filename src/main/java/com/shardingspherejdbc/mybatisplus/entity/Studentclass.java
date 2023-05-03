@@ -13,12 +13,12 @@ import lombok.Setter;
  * 
  * </p>
  *
- * @author 
+ * @author
  * @since 2023-04-24
  */
 @Getter
 @Setter
-//@TableName(value = "studentClass")
+ @TableName(value = "studentClass")
 public class Studentclass implements Serializable {
 
     private static final long serialVersionUID = 1L;
