@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.druid.support.json.JSONUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shardingspherejdbc.mybatisplus.dto.questions.SendOtherInfo;
 import com.shardingspherejdbc.mybatisplus.dto.questions.SendQuestionsDto;
 import com.shardingspherejdbc.mybatisplus.entity.Keywords;
@@ -126,14 +127,17 @@ public class QuestionsController {
 
     @GetMapping(value = "/list")
     public ResponseEntity<Page<Questions>> list(@RequestParam(required = false) Integer current,
-            @RequestParam(required = false) Integer pageSize) {
+            @RequestParam(required = false) Integer pageSize,@RequestParam(required = true) String search ) {
         if (current == null) {
             current = 1;
         }
         if (pageSize == null) {
-            pageSize = 10;
+            pageSize = 100;
         }
-        Page<Questions> aPage = iQuestionsService.page(new Page<>(current, pageSize));
+
+        QueryWrapper<Questions> wrapper = new QueryWrapper<>();
+
+        Page<Questions> aPage = iQuestionsService.page(new Page<>(current, pageSize),wrapper.like("question_describe",search));
         return new ResponseEntity<>(aPage, HttpStatus.OK);
     }
 
