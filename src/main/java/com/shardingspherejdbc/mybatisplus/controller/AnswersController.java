@@ -1,5 +1,7 @@
 package com.shardingspherejdbc.mybatisplus.controller;
 
+import com.shardingspherejdbc.mybatisplus.entity.Questions;
+import com.shardingspherejdbc.mybatisplus.service.IQuestionsService;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.http.HttpStatus;
@@ -8,12 +10,14 @@ import com.shardingspherejdbc.mybatisplus.service.IAnswersService;
 import com.shardingspherejdbc.mybatisplus.entity.Answers;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Arrays;
+
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
- * @author 
+ * @author
  * @since 2023-04-24
  */
 @RestController
@@ -23,6 +27,9 @@ public class AnswersController {
 
     @Autowired
     private IAnswersService iAnswersService;
+
+    @Autowired
+    private IQuestionsService iQuestionsService;
 
     @GetMapping(value = "/list")
     public ResponseEntity<Page<Answers>> list(@RequestParam(required = false) Integer current, @RequestParam(required = false) Integer pageSize) {
@@ -43,8 +50,34 @@ public class AnswersController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<Object> create(@RequestBody Answers params) {
+        handleAnswer(params);
         iAnswersService.save(params);
         return new ResponseEntity<>("created successfully", HttpStatus.OK);
+    }
+
+    private void handleAnswer(Answers params) {
+
+        Questions question = iQuestionsService.getById(params.getQuestionId());
+        if (isRight(params, question)) {
+            params.setStatus(1);
+            params.setGetScore(params.getScore());
+        } else {
+            params.setStatus(0);
+            params.setGetScore(0);
+        }
+
+
+    }
+
+    private boolean isRight(Answers params, Questions question) {
+        String answerContent = question.getAnswerContent();
+        String[] answers = answerContent.split(",");
+        String answerContent2 = params.getStuAnswerContent();
+        String[] answers2 = answerContent2.split(",");
+        Arrays.sort(answers);
+        Arrays.sort(answers2);
+
+        return Arrays.equals(answers, answers2);
     }
 
     @PostMapping(value = "/delete/{id}")

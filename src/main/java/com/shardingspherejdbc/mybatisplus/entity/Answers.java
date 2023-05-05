@@ -30,7 +30,7 @@ public class Answers implements Serializable {
     private String stuAnswerContent;
     private String answerContent;
     private Integer score;
-    private Short status;
+    private Integer status;
     private Integer getScore;
     private Integer time;
 }
