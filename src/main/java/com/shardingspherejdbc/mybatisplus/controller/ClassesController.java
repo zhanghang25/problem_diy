@@ -3,6 +3,7 @@ package com.shardingspherejdbc.mybatisplus.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shardingspherejdbc.mybatisplus.dto.SelectClassParamDto;
 import com.shardingspherejdbc.mybatisplus.dto.SelectClassResultDto;
+import com.shardingspherejdbc.mybatisplus.dto.classes.ClassPapersResultDto;
 import com.shardingspherejdbc.mybatisplus.entity.Students;
 import com.shardingspherejdbc.mybatisplus.entity.Teachers;
 import com.shardingspherejdbc.mybatisplus.mapper.ClassesMapper;
@@ -52,6 +53,12 @@ public class ClassesController {
         }
         Page<Classes> aPage = iClassesService.page(new Page<>(current, pageSize));
         return new ResponseEntity<>(aPage, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/classPapers")
+    public ResponseEntity<List<ClassPapersResultDto>> classPapers(@RequestParam String classId){
+        List<ClassPapersResultDto> classPapersResultDtos = iClassesMapper.classPapers(classId);
+        return new ResponseEntity<>(classPapersResultDtos,HttpStatus.OK);
     }
 
     @NotNull

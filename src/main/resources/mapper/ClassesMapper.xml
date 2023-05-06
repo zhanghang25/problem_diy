@@ -2,22 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.shardingspherejdbc.mybatisplus.mapper.ClassesMapper">
-  <!--Author:，Date:2023-04-30，selectClass的结果映射配置，由mybatis-plus-generator-ui自动生成-->
-  <resultMap id="SelectClassResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.SelectClassResultDto"> 
-    <result column="id" property="id"/>
-    <result column="class_name" property="className"/>
-    <result column="class_id" property="classId"/>
-    <result column="test_id" property="testId"/>
+  <!--Author:，Date:2023-05-06，classPapers的结果映射配置，由mybatis-plus-generator-ui自动生成-->
+  <resultMap id="ClassPapersResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.classes.ClassPapersResultDto"> 
     <result column="test_name" property="testName"/>
-    <result column="paper_count" property="paperCount"/>
-    <result column="status_id" property="statusId"/>
-    <result column="time" property="time"/>
-  </resultMap>
-  <!--Author:，Date:2023-04-30，selectClass的结果映射配置，由mybatis-plus-generator-ui自动生成-->
+    <result column="test_id" property="testId"/> 
+  </resultMap>  
+  <!--Author:，Date:2023-05-06，classPapers的结果映射配置，由mybatis-plus-generator-ui自动生成-->  
+  <!--Author:，Date:2023-04-30，selectClass的结果映射配置，由mybatis-plus-generator-ui自动生成-->  
+  <resultMap id="SelectClassResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.SelectClassResultDto"> 
+    <result column="id" property="id"/>  
+    <result column="class_name" property="className"/>  
+    <result column="class_id" property="classId"/>  
+    <result column="test_id" property="testId"/>  
+    <result column="test_name" property="testName"/>  
+    <result column="paper_count" property="paperCount"/>  
+    <result column="status_id" property="statusId"/>  
+    <result column="time" property="time"/> 
+  </resultMap>  
+  <!--Author:，Date:2023-04-30，selectClass的结果映射配置，由mybatis-plus-generator-ui自动生成-->  
   <!-- 通用查询映射结果 -->  
   <resultMap id="BaseResultMap" type="com.shardingspherejdbc.mybatisplus.entity.Classes"> 
     <id column="id" property="id"/>  
-    <result column="class_id" property="classId"/>
+    <result column="class_id" property="classId"/>  
     <result column="class_name" property="className"/>  
     <result column="teacher_id" property="teacherId"/> 
   </resultMap>  
@@ -25,10 +31,15 @@
   <sql id="Base_Column_List">id, class_id, class_name, teacher_id</sql>  
   <!--Author:，Date:2023-04-30,由mybatis-plus-generator-ui自动生成-->  
   <!--Author:，Date:2023-04-30,由mybatis-plus-generator-ui自动生成-->  
-  <!--Author:，Date:2023-04-30,由mybatis-plus-generator-ui自动生成-->
-  <select id="selectClass" resultMap="SelectClassResultDtoMap">SELECT b.time, a.id, a.class_name,a.class_id,b.test_id,b.test_name,b.status_id,COUNT(b.test_id) as paper_count FROM classes AS a left JOIN papers AS b on b.class_id = a.id where 1=1
+  <!--Author:，Date:2023-04-30,由mybatis-plus-generator-ui自动生成-->  
+  <select id="selectClass" resultMap="SelectClassResultDtoMap">SELECT b.time, a.id, a.class_name,a.class_id,b.test_id,b.test_name,b.status_id,COUNT(b.test_id) as paper_count FROM classes AS a left JOIN papers AS b on b.class_id = a.id where 1=1 
     <if test="teacherId!=null">AND a.teacher_id = #{teacherId}</if>  
     <if test="classId!=null">AND a.class_id like concat('%',#{classId},'%')</if>  
     <if test="className!=null">AND a.class_name like concat('%',#{className},'%')</if> GROUP BY a.id, b.test_name,a.class_name,a.class_id, b.test_id,b.status_id,b.time
+  </select>  
+  <!--Author:，Date:2023-05-06,由mybatis-plus-generator-ui自动生成-->  
+  <!--Author:，Date:2023-05-06,由mybatis-plus-generator-ui自动生成-->
+  <select id="classPapers" resultMap="ClassPapersResultDtoMap">SELECT a.test_name , a.test_id FROM papers AS a WHERE a.status_id = 1
+    <if test="classId!=null">AND a.class_id = #{classId}</if> GROUP BY a.test_id,a.test_name,a.status_id
   </select>
 </mapper>

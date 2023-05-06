@@ -1,6 +1,9 @@
 package com.shardingspherejdbc.mybatisplus.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.shardingspherejdbc.mybatisplus.dto.questions.QueryQuestionsResultDto;
+import com.shardingspherejdbc.mybatisplus.mapper.PapersMapper;
+import com.shardingspherejdbc.mybatisplus.mapper.QuestionsMapper;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.http.HttpStatus;
@@ -8,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import com.shardingspherejdbc.mybatisplus.service.IPapersService;
 import com.shardingspherejdbc.mybatisplus.entity.Papers;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * <p>
@@ -25,6 +30,9 @@ public class PapersController {
     @Autowired
     private IPapersService iPapersService;
 
+    @Autowired
+    private PapersMapper papersMapper;
+
     @GetMapping(value = "/list")
     public ResponseEntity<Page<Papers>> list(@RequestParam(required = false) Integer current, @RequestParam(required = false) Integer pageSize) {
         if (current == null) {
@@ -40,6 +48,13 @@ public class PapersController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Papers> getById(@PathVariable("id") String id) {
         return new ResponseEntity<>(iPapersService.getById(id), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/queryQuestions")
+    public ResponseEntity<List<QueryQuestionsResultDto>> queryQuestions(@RequestParam String testId){
+        List<QueryQuestionsResultDto> list = papersMapper.queryQuestions(testId);
+        return new ResponseEntity<>(list,HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/create")
