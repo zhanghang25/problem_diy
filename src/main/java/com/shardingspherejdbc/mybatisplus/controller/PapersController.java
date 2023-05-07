@@ -1,6 +1,7 @@
 package com.shardingspherejdbc.mybatisplus.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.shardingspherejdbc.mybatisplus.dto.errors.MyErrorsResultDto;
 import com.shardingspherejdbc.mybatisplus.dto.questions.QueryQuestionsResultDto;
 import com.shardingspherejdbc.mybatisplus.mapper.PapersMapper;
 import com.shardingspherejdbc.mybatisplus.mapper.QuestionsMapper;
@@ -56,7 +57,12 @@ public class PapersController {
         return new ResponseEntity<>(list,HttpStatus.OK);
 
     }
+    @GetMapping(value = "/myErrors")
+    public ResponseEntity<List<MyErrorsResultDto>> myErrors(@RequestParam String studentId){
+        List<MyErrorsResultDto> list = papersMapper.myErrors(studentId);
+        return new ResponseEntity<>(list,HttpStatus.OK);
 
+    }
     @PostMapping(value = "/create")
     public ResponseEntity<Object> create(@RequestBody Papers params) {
         iPapersService.save(params);

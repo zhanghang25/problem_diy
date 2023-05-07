@@ -7,6 +7,16 @@ package com.shardingspherejdbc.mybatisplus.dto.questions;
  */
 public class QueryQuestionsResultDto {
 
+    private Integer time;
+
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
+    }
+
     private Integer id;
 
     private String questionDescribe;
@@ -26,6 +36,16 @@ public class QueryQuestionsResultDto {
     private Integer score;
 
     private String testName;
+
+    private Integer testId;
+
+    public Integer getTestId() {
+        return testId;
+    }
+
+    public void setTestId(Integer testId) {
+        this.testId = testId;
+    }
 
     public Integer getId() {
         return id;

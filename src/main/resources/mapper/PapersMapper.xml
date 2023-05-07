@@ -2,18 +2,26 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.shardingspherejdbc.mybatisplus.mapper.PapersMapper">
-  <!--Author:，Date:2023-05-06，queryQuestions的结果映射配置，由mybatis-plus-generator-ui自动生成-->
-  <resultMap id="QueryQuestionsResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.questions.QueryQuestionsResultDto"> 
-    <result column="id" property="id"/>
+  <!--Author:，Date:2023-05-08，myErrors的结果映射配置，由mybatis-plus-generator-ui自动生成-->
+  <resultMap id="MyErrorsResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.errors.MyErrorsResultDto"> 
     <result column="question_describe" property="questionDescribe"/>
-    <result column="type" property="type"/>
-    <result column="answer_content" property="answerContent"/>
-    <result column="other_answer" property="otherAnswer"/>
-    <result column="disorder" property="disorder"/>
-    <result column="keywords" property="keywords"/>
-    <result column="source" property="source"/>
-    <result column="score" property="score"/>
-    <result column="test_name" property="testName"/> 
+    <result column="stu_answer_content" property="stuAnswerContent"/>
+    <result column="answer_content" property="answerContent"/> 
+  </resultMap>  
+  <!--Author:，Date:2023-05-06，queryQuestions的结果映射配置，由mybatis-plus-generator-ui自动生成-->  
+  <resultMap id="QueryQuestionsResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.questions.QueryQuestionsResultDto"> 
+    <result column="id" property="id"/>  
+    <result column="question_describe" property="questionDescribe"/>  
+    <result column="type" property="type"/>  
+    <result column="answer_content" property="answerContent"/>  
+    <result column="other_answer" property="otherAnswer"/>  
+    <result column="disorder" property="disorder"/>  
+    <result column="keywords" property="keywords"/>  
+    <result column="source" property="source"/>  
+    <result column="score" property="score"/>  
+    <result column="test_name" property="testName"/>  
+    <result column="test_id" property="testId"/>  
+    <result column="time" property="time"/> 
   </resultMap>  
   <!-- 通用查询映射结果 -->  
   <resultMap id="BaseResultMap" type="com.shardingspherejdbc.mybatisplus.entity.Papers"> 
@@ -29,8 +37,12 @@
   </resultMap>  
   <!-- 通用查询结果列 -->  
   <sql id="Base_Column_List">id, test_id, test_name, question_id, score, teacher_id, class_id, status_id, time</sql>  
-  <!--Author:，Date:2023-05-06,由mybatis-plus-generator-ui自动生成-->
-  <select id="queryQuestions" resultMap="QueryQuestionsResultDtoMap">SELECT b.* , a.test_name FROM papers AS a LEFT JOIN questions AS b ON a.question_id = b.id WHERE 1=1 
+  <!--Author:，Date:2023-05-06,由mybatis-plus-generator-ui自动生成-->  
+  <select id="queryQuestions" resultMap="QueryQuestionsResultDtoMap">SELECT b.* ,a.test_id, a.test_name,a.time FROM papers AS a LEFT JOIN questions AS b ON a.question_id = b.id WHERE 1=1 
     <if test="testId!=null">AND a.test_id = #{testId}</if> 
+  </select>  
+  <!--Author:，Date:2023-05-08,由mybatis-plus-generator-ui自动生成-->
+  <select id="myErrors" resultMap="MyErrorsResultDtoMap">SELECT b.question_describe , a.stu_answer_content,a.answer_content FROM answers AS a LEFT JOIN questions AS b ON a.question_id = b.id WHERE 1=1 
+    <if test="studentId!=null">AND a.student_id = #{studentId}</if> AND a.status = 0
   </select>
 </mapper>

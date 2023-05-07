@@ -1,6 +1,13 @@
 package com.shardingspherejdbc.mybatisplus.controller;
 
+import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.shardingspherejdbc.mybatisplus.dto.paper.SendAnswer;
+import com.shardingspherejdbc.mybatisplus.dto.questions.HasPapersResultDto;
+import com.shardingspherejdbc.mybatisplus.dto.questions.QueryQuestionsResultDto;
 import com.shardingspherejdbc.mybatisplus.entity.Questions;
+import com.shardingspherejdbc.mybatisplus.mapper.AnswersMapper;
+import com.shardingspherejdbc.mybatisplus.mapper.PapersMapper;
 import com.shardingspherejdbc.mybatisplus.service.IQuestionsService;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,6 +18,8 @@ import com.shardingspherejdbc.mybatisplus.entity.Answers;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * <p>
@@ -31,6 +40,12 @@ public class AnswersController {
     @Autowired
     private IQuestionsService iQuestionsService;
 
+    @Autowired
+    private PapersMapper papersMapper;
+
+    @Autowired
+    private AnswersMapper answersMapper;
+
     @GetMapping(value = "/list")
     public ResponseEntity<Page<Answers>> list(@RequestParam(required = false) Integer current, @RequestParam(required = false) Integer pageSize) {
         if (current == null) {
@@ -41,6 +56,35 @@ public class AnswersController {
         }
         Page<Answers> aPage = iAnswersService.page(new Page<>(current, pageSize));
         return new ResponseEntity<>(aPage, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/hasPapers")
+    public ResponseEntity<List<HasPapersResultDto>> hasPapers(@RequestParam String studentId,@RequestParam String classId){
+        List<HasPapersResultDto> list = answersMapper.hasPapers(studentId,classId);
+        return new ResponseEntity<>(list,HttpStatus.OK);
+    }
+    
+    @PostMapping(value = "/check")
+    public ResponseEntity<Object> check(@RequestBody SendAnswer params){
+        QueryWrapper<Answers> wrapper = new QueryWrapper<>();
+
+        wrapper.eq("student_id",params.getStudentId()).eq("test_id",params.getTestId());
+        List<Answers> list = iAnswersService.list(wrapper);
+        if(list == null){
+            return new ResponseEntity<>("success", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("error", HttpStatus.OK);
+        }
+    }
+
+    @PostMapping(value = "/myPaper")
+    public ResponseEntity<List<Answers>> myPaper(@RequestBody SendAnswer params){
+        QueryWrapper<Answers> wrapper = new QueryWrapper<>();
+
+        wrapper.eq("student_id",params.getStudentId()).eq("test_id",params.getTestId());
+        List<Answers> list = iAnswersService.list(wrapper);
+            return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     @GetMapping(value = "/{id}")
@@ -55,9 +99,40 @@ public class AnswersController {
         return new ResponseEntity<>("created successfully", HttpStatus.OK);
     }
 
+    @PostMapping(value = "/sendResult")
+    public ResponseEntity<Object>  sendResult(@RequestBody SendAnswer params){
+
+        List<String> strings = JSONUtil.parseArray(params.getListOfAnswers()).toList(String.class);
+//        String[] split = StrUtil.strip(params.getListOfAnswers(), "[]").split(",");
+//        List<String> strings = Arrays.asList(split);
+        System.out.println(strings.toString());
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++"+strings.size());
+        List<QueryQuestionsResultDto> queryQuestionsResultDtos = papersMapper.queryQuestions(params.getTestId());
+//        queryQuestionsResultDtos.stream().forEach(this::getAnswer);
+
+        IntStream.range(0,strings.size()).forEach(i->{
+           this.getAnswer(queryQuestionsResultDtos.get(i),strings.get(i) ,params.getStudentId());
+        });
+        return new ResponseEntity<>("send Success",HttpStatus.OK);
+    }
+
+    private void getAnswer(QueryQuestionsResultDto query,String answer,Integer studentId){
+        Answers answers = new Answers();
+        answers.setStuAnswerContent(answer);
+        answers.setQuestionId(query.getId());
+        answers.setScore(query.getScore());
+        answers.setStudentId(studentId);
+        answers.setAnswerContent(query.getAnswerContent());
+        this.handleAnswer(answers);
+        answers.setTestId(query.getTestId());
+        iAnswersService.save(answers);
+    }
+
+
     private void handleAnswer(Answers params) {
 
         Questions question = iQuestionsService.getById(params.getQuestionId());
+        params.setTestId(999999);
         if (isRight(params, question)) {
             params.setStatus(1);
             params.setGetScore(params.getScore());
