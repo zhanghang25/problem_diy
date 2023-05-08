@@ -2,6 +2,7 @@ package com.shardingspherejdbc.mybatisplus.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shardingspherejdbc.mybatisplus.dto.errors.MyErrorsResultDto;
+import com.shardingspherejdbc.mybatisplus.dto.papers.GetMyPapersResultDto;
 import com.shardingspherejdbc.mybatisplus.dto.questions.QueryQuestionsResultDto;
 import com.shardingspherejdbc.mybatisplus.mapper.PapersMapper;
 import com.shardingspherejdbc.mybatisplus.mapper.QuestionsMapper;
@@ -34,6 +35,8 @@ public class PapersController {
     @Autowired
     private PapersMapper papersMapper;
 
+
+
     @GetMapping(value = "/list")
     public ResponseEntity<Page<Papers>> list(@RequestParam(required = false) Integer current, @RequestParam(required = false) Integer pageSize) {
         if (current == null) {
@@ -49,6 +52,12 @@ public class PapersController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Papers> getById(@PathVariable("id") String id) {
         return new ResponseEntity<>(iPapersService.getById(id), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getMyPapers")
+    public ResponseEntity<List<GetMyPapersResultDto>> getMyPapers(@RequestParam String studentId){
+        List<GetMyPapersResultDto> myPapers = papersMapper.getMyPapers(studentId);
+        return new ResponseEntity<>(myPapers,HttpStatus.OK);
     }
 
     @GetMapping(value = "/queryQuestions")

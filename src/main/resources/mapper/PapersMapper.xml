@@ -2,10 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.shardingspherejdbc.mybatisplus.mapper.PapersMapper">
-  <!--Author:，Date:2023-05-08，myErrors的结果映射配置，由mybatis-plus-generator-ui自动生成-->
+  <!--Author:，Date:2023-05-08，getMyPapers的结果映射配置，由mybatis-plus-generator-ui自动生成-->
+  <resultMap id="GetMyPapersResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.papers.GetMyPapersResultDto"> 
+    <result column="test_name" property="testName"/>
+    <result column="test_id" property="testId"/> 
+  </resultMap>  
+  <!--Author:，Date:2023-05-08，myErrors的结果映射配置，由mybatis-plus-generator-ui自动生成-->  
   <resultMap id="MyErrorsResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.errors.MyErrorsResultDto"> 
-    <result column="question_describe" property="questionDescribe"/>
-    <result column="stu_answer_content" property="stuAnswerContent"/>
+    <result column="question_describe" property="questionDescribe"/>  
+    <result column="stu_answer_content" property="stuAnswerContent"/>  
     <result column="answer_content" property="answerContent"/> 
   </resultMap>  
   <!--Author:，Date:2023-05-06，queryQuestions的结果映射配置，由mybatis-plus-generator-ui自动生成-->  
@@ -41,8 +46,12 @@
   <select id="queryQuestions" resultMap="QueryQuestionsResultDtoMap">SELECT b.* ,a.test_id, a.test_name,a.time FROM papers AS a LEFT JOIN questions AS b ON a.question_id = b.id WHERE 1=1 
     <if test="testId!=null">AND a.test_id = #{testId}</if> 
   </select>  
-  <!--Author:，Date:2023-05-08,由mybatis-plus-generator-ui自动生成-->
+  <!--Author:，Date:2023-05-08,由mybatis-plus-generator-ui自动生成-->  
   <select id="myErrors" resultMap="MyErrorsResultDtoMap">SELECT b.question_describe , a.stu_answer_content,a.answer_content FROM answers AS a LEFT JOIN questions AS b ON a.question_id = b.id WHERE 1=1 
     <if test="studentId!=null">AND a.student_id = #{studentId}</if> AND a.status = 0
+  </select>  
+  <!--Author:，Date:2023-05-08,由mybatis-plus-generator-ui自动生成-->
+  <select id="getMyPapers" resultMap="GetMyPapersResultDtoMap">SELECT a.test_name,a.test_id FROM papers AS a LEFT JOIN answers AS b ON b.question_id = a.question_id WHERE 1=1 
+    <if test="studentId!=null">AND b.student_id = #{studentId}</if> GROUP BY a.test_name,a.test_id
   </select>
 </mapper>
