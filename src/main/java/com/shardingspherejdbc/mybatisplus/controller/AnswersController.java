@@ -71,7 +71,7 @@ public class AnswersController {
 
         wrapper.eq("student_id",params.getStudentId()).eq("test_id",params.getTestId());
         List<Answers> list = iAnswersService.list(wrapper);
-        if(list == null){
+        if(list.isEmpty()){
             return new ResponseEntity<>("success", HttpStatus.OK);
         }else{
             return new ResponseEntity<>("error", HttpStatus.OK);
