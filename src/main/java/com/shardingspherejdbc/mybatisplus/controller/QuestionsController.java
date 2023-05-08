@@ -115,7 +115,7 @@ public class QuestionsController {
                 papers.setTime(params.getTime());
                 papers.setTestName(params.getTestName());
                 papers.setTestId(params.getTestId());
-                papers.setStatusId(1);
+                papers.setStatusId(2);
                 papers.setQuestionId(item.getId());
                 papers.setScore(item.getScore());
                 iPapersService.save(papers);
