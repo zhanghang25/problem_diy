@@ -2,12 +2,16 @@ package com.shardingspherejdbc.mybatisplus.controller;
 
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.shardingspherejdbc.mybatisplus.dto.AvgAndKeyword;
+import com.shardingspherejdbc.mybatisplus.dto.AvgScoreResultDto;
+import com.shardingspherejdbc.mybatisplus.dto.ErrorKeywordResultDto;
 import com.shardingspherejdbc.mybatisplus.dto.paper.SendAnswer;
 import com.shardingspherejdbc.mybatisplus.dto.questions.HasPapersResultDto;
 import com.shardingspherejdbc.mybatisplus.dto.questions.QueryQuestionsResultDto;
 import com.shardingspherejdbc.mybatisplus.entity.Questions;
 import com.shardingspherejdbc.mybatisplus.mapper.AnswersMapper;
 import com.shardingspherejdbc.mybatisplus.mapper.PapersMapper;
+import com.shardingspherejdbc.mybatisplus.service.IKeywordsService;
 import com.shardingspherejdbc.mybatisplus.service.IQuestionsService;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,8 +21,11 @@ import com.shardingspherejdbc.mybatisplus.service.IAnswersService;
 import com.shardingspherejdbc.mybatisplus.entity.Answers;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
-import java.util.List;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -42,6 +49,9 @@ public class AnswersController {
 
     @Autowired
     private PapersMapper papersMapper;
+
+    @Autowired
+    private IKeywordsService iKeywordsService;
 
     @Autowired
     private AnswersMapper answersMapper;
@@ -129,6 +139,8 @@ public class AnswersController {
     }
 
 
+
+
     private void handleAnswer(Answers params) {
 
         Questions question = iQuestionsService.getById(params.getQuestionId());
@@ -155,6 +167,44 @@ public class AnswersController {
         return Arrays.equals(answers, answers2);
     }
 
+
+    @GetMapping(value = "/avgScore")
+    public ResponseEntity<AvgAndKeyword> avgScore(@RequestParam String testId){
+        List<AvgScoreResultDto> avgScoreResultDtos = answersMapper.avgScore(testId);
+        OptionalDouble average = avgScoreResultDtos.stream().mapToDouble(m -> {
+            return m.getFactScore().divide(m.getRightScore(),2, RoundingMode.HALF_DOWN).multiply(new BigDecimal(100)).doubleValue();
+        }).average();
+
+
+        List<ErrorKeywordResultDto> errorKeywordResultDtos = answersMapper.errorKeyword(testId);
+
+        Optional<Map.Entry<Integer, List<ErrorKeywordResultDto>>> collect = errorKeywordResultDtos.stream().collect(Collectors.groupingBy(ErrorKeywordResultDto::getQuestionId,
+                Collectors.collectingAndThen(Collectors.toList(),
+                        list -> list.stream()
+                                .filter(dto -> dto.getStatus() == 0)
+                                .collect(Collectors.toList())))).entrySet().stream().collect(
+                Collectors.maxBy(Comparator.comparingInt(entry -> entry.getValue().size()))
+        );
+
+        Integer question_id = 0;
+        if(collect.isPresent()){
+
+            question_id = collect.get().getKey() ;
+        }else{
+             question_id = 14;
+        }
+
+        Questions question = iQuestionsService.getById(question_id);
+        Integer s =  Integer.parseInt(question.getKeywords().split(",")[0]) ;
+
+        String keywords = iKeywordsService.getById(s).getKeywords();
+
+        AvgAndKeyword avgAndKeyword = new AvgAndKeyword();
+        avgAndKeyword.setKeyword(keywords);
+        avgAndKeyword.setAvg(average.getAsDouble());
+        return new ResponseEntity<>(avgAndKeyword,HttpStatus.OK);
+
+    }
     @PostMapping(value = "/delete/{id}")
     public ResponseEntity<Object> delete(@PathVariable("id") String id) {
         iAnswersService.removeById(id);
@@ -164,6 +214,7 @@ public class AnswersController {
     @PostMapping(value = "/update")
     public ResponseEntity<Object> update(@RequestBody Answers params) {
         iAnswersService.updateById(params);
+
         return new ResponseEntity<>("updated successfully", HttpStatus.OK);
     }
 }

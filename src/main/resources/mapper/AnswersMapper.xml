@@ -2,12 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.shardingspherejdbc.mybatisplus.mapper.AnswersMapper">
-  <!--Author:，Date:2023-05-07，hasPapers的结果映射配置，由mybatis-plus-generator-ui自动生成-->
-  <resultMap id="HasPapersResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.questions.HasPapersResultDto"> 
-    <result column="test_name" property="testName"/>
+  <!--Author:，Date:2023-05-09，errorKeyword的结果映射配置，由mybatis-plus-generator-ui自动生成-->
+  <resultMap id="ErrorKeywordResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.ErrorKeywordResultDto"> 
+    <result column="id" property="id"/>
+    <result column="question_id" property="questionId"/>
     <result column="test_id" property="testId"/>
     <result column="student_id" property="studentId"/>
-    <result column="your_score" property="yourScore"/>
+    <result column="start_time" property="startTime"/>
+    <result column="end_time" property="endTime"/>
+    <result column="stu_answer_content" property="stuAnswerContent"/>
+    <result column="answer_content" property="answerContent"/>
+    <result column="score" property="score"/>
+    <result column="status" property="status"/>
+    <result column="get_score" property="getScore"/>
+    <result column="time" property="time"/> 
+  </resultMap>  
+  <!--Author:，Date:2023-05-09，avgScore的结果映射配置，由mybatis-plus-generator-ui自动生成-->  
+  <resultMap id="AvgScoreResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.AvgScoreResultDto"> 
+    <result column="fact_score" property="factScore"/>  
+    <result column="right_score" property="rightScore"/> 
+  </resultMap>  
+  <!--Author:，Date:2023-05-07，hasPapers的结果映射配置，由mybatis-plus-generator-ui自动生成-->  
+  <resultMap id="HasPapersResultDtoMap" type="com.shardingspherejdbc.mybatisplus.dto.questions.HasPapersResultDto"> 
+    <result column="test_name" property="testName"/>  
+    <result column="test_id" property="testId"/>  
+    <result column="student_id" property="studentId"/>  
+    <result column="your_score" property="yourScore"/>  
     <result column="office_score" property="officeScore"/> 
   </resultMap>  
   <!--Author:，Date:2023-05-07，hasPapers的结果映射配置，由mybatis-plus-generator-ui自动生成-->  
@@ -29,9 +49,17 @@
   <!-- 通用查询结果列 -->  
   <sql id="Base_Column_List">id, question_id, test_id, student_id, start_time, end_time, stu_answer_content, answer_content, score, status, get_score, time</sql>  
   <!--Author:，Date:2023-05-07,由mybatis-plus-generator-ui自动生成-->  
-  <!--Author:，Date:2023-05-07,由mybatis-plus-generator-ui自动生成-->
+  <!--Author:，Date:2023-05-07,由mybatis-plus-generator-ui自动生成-->  
   <select id="hasPapers" resultMap="HasPapersResultDtoMap">SELECT a.test_name,a.test_id,b.student_id,SUM(b.get_score) AS your_score,SUM(b.score) AS office_score FROM answers AS b LEFT JOIN papers AS a ON a.test_id = b.test_id WHERE 1=1 
-    <if test="studentId!=null">AND b.student_id = #{studentId}</if>
+    <if test="studentId!=null">AND b.student_id = #{studentId}</if>  
     <if test="classId!=null">AND a.class_id = #{classId}</if> GROUP BY a.test_name,a.test_id
+  </select>  
+  <!--Author:，Date:2023-05-09,由mybatis-plus-generator-ui自动生成-->  
+  <select id="avgScore" resultMap="AvgScoreResultDtoMap">SELECT SUM(a.get_score) AS fact_score , SUM(a.score) AS right_score FROM answers AS a WHERE 1=1 
+    <if test="testId!=null">AND a.test_id = #{testId}</if> GROUP BY a.test_id,a.student_id
+  </select>  
+  <!--Author:，Date:2023-05-09,由mybatis-plus-generator-ui自动生成-->
+  <select id="errorKeyword" resultMap="ErrorKeywordResultDtoMap">SELECT a.* FROM answers AS a WHERE 1=1 
+    <if test="testId!=null">AND a.test_id = #{testId}</if> 
   </select>
 </mapper>

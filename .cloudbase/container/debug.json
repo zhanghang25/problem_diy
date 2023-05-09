@@ -4,8 +4,7 @@
       "name": "problem-diy",
       "domain": "",
       "ip": "",
-      "mode": "compose",
-      "containerId": "a15569e38508cc93264e59a9dde384c4a241a393fb8d03438505b3be697d4c62"
+      "mode": "compose"
     }
   ],
   "config": {

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.shardingspherejdbc.mybatisplus.dto.questions.SendOtherInfo;
 import com.shardingspherejdbc.mybatisplus.dto.questions.SendQuestionsDto;
+import com.shardingspherejdbc.mybatisplus.dto.questions.SendUpdateQuestionsDto;
 import com.shardingspherejdbc.mybatisplus.entity.Keywords;
 import com.shardingspherejdbc.mybatisplus.entity.Papers;
 import com.shardingspherejdbc.mybatisplus.service.IKeywordsService;
@@ -67,6 +68,33 @@ public class QuestionsController {
         return join;
     }
 
+    public Questions convert(SendUpdateQuestionsDto dto ){
+
+
+        Questions questions = new Questions();
+        questions.setId(dto.getId());
+        questions.setQuestionDescribe(dto.getQuestionDescribe());
+        questions.setAnswerContent(dto.getAnswerContent());
+        questions.setKeywords(this.handleKeyword(dto.getKeywords()));
+
+        questions.setType(dto.getType());
+        System.out.println(dto.toString());
+        System.out.println(dto.getType());
+        System.out.println(dto.getType() == "1");
+        if (dto.getType().equals("1")) {
+            questions.setOtherAnswer(
+                    dto.getOptionA() + "," + dto.getOptionB() + "," + dto.getOptionC() + "," + dto.getOptionD());
+            questions.setDisorder("1");
+
+        } else {
+            questions.setDisorder(dto.getOrder());
+        }
+        questions.setSource(dto.getSource());
+        questions.setScore(dto.getScore());
+
+        return questions;
+    }
+
     public Questions convert(SendQuestionsDto dto) {
 
         Questions questions = new Questions();
@@ -91,7 +119,26 @@ public class QuestionsController {
 
         return questions;
     }
+    @PostMapping(value = "/sendUpdateQuestions")
+    public ResponseEntity<Object> sendUpdateQuestions(@RequestHeader Map<String, String> headers,
+                                                @RequestBody SendOtherInfo params) {
+        System.out.println("222222");
+        System.out.println(params.getAllList());
+        List<SendUpdateQuestionsDto> sendList = JSONUtil.parseArray(params.getAllList()).toList(SendUpdateQuestionsDto.class);
+        System.out.println(sendList);
+        List<Questions> collect = sendList.stream().map(this::convert).collect(Collectors.toList());
+        System.out.println(collect);
 
+        collect.stream().forEach(item -> {
+            System.out.println("@@@@3333");
+            System.out.println(item);
+            boolean save = iQuestionsService.updateById(item);
+            System.out.println(save);
+
+        });
+
+        return new ResponseEntity<>("Success1", HttpStatus.OK);
+    }
     @PostMapping(value = "/sendQuestions")
     public ResponseEntity<Object> sendQuestions(@RequestHeader Map<String, String> headers,
             @RequestBody SendOtherInfo params) {
