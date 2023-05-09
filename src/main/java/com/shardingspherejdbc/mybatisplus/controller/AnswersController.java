@@ -177,7 +177,12 @@ public class AnswersController {
 
 
         List<ErrorKeywordResultDto> errorKeywordResultDtos = answersMapper.errorKeyword(testId);
-
+        if(errorKeywordResultDtos.isEmpty() || avgScoreResultDtos.isEmpty()){
+            AvgAndKeyword avgAndKeyword = new AvgAndKeyword();
+            avgAndKeyword.setKeyword("计算机历史");
+            avgAndKeyword.setAvg(0.0);
+            return new ResponseEntity<>(avgAndKeyword,HttpStatus.OK);
+        }
         Optional<Map.Entry<Integer, List<ErrorKeywordResultDto>>> collect = errorKeywordResultDtos.stream().collect(Collectors.groupingBy(ErrorKeywordResultDto::getQuestionId,
                 Collectors.collectingAndThen(Collectors.toList(),
                         list -> list.stream()
