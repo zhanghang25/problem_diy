@@ -176,8 +176,8 @@ public class AnswersController {
         }).average();
 
 
-        List<QueryQuestionsResultDto> list = papersMapper.queryQuestions(testId);
-        Integer value = list.stream().mapToInt(QueryQuestionsResultDto::getScore).sum();
+        List<QueryQuestionsResultDto> list2 = papersMapper.queryQuestions(testId);
+        Integer value = list2.stream().mapToInt(QueryQuestionsResultDto::getScore).sum();
 
 //        avgScoreResultDtos.stream().
         List<ErrorKeywordResultDto> errorKeywordResultDtos = answersMapper.errorKeyword(testId);
