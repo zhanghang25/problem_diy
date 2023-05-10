@@ -183,7 +183,7 @@ public class AnswersController {
             AvgAndKeyword avgAndKeyword = new AvgAndKeyword();
             avgAndKeyword.setKeyword("计算机历史");
             avgAndKeyword.setAvg(0.0);
-            avgAndKeyword.setAllScore(0.0);
+            avgAndKeyword.setAllScore(0);
             return new ResponseEntity<>(avgAndKeyword,HttpStatus.OK);
         }
         Optional<Map.Entry<Integer, List<ErrorKeywordResultDto>>> collect = errorKeywordResultDtos.stream().collect(Collectors.groupingBy(ErrorKeywordResultDto::getQuestionId,
@@ -194,8 +194,8 @@ public class AnswersController {
                 Collectors.maxBy(Comparator.comparingInt(entry -> entry.getValue().size()))
         );
 
-        Map<Integer, Double> collect1 = errorKeywordResultDtos.stream().collect(Collectors.groupingBy(ErrorKeywordResultDto::getQuestionId, Collectors.summingDouble(ErrorKeywordResultDto::getScore)));
-        Double value = collect1.entrySet().iterator().next().getValue();
+        Map<Integer, Integer> collect1 = errorKeywordResultDtos.stream().collect(Collectors.groupingBy(ErrorKeywordResultDto::getStudentId, Collectors.summingInt(ErrorKeywordResultDto::getScore)));
+        Integer value = collect1.entrySet().iterator().next().getValue();
 
         Integer question_id = 0;
         if(collect.isPresent()){

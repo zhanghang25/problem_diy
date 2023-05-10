@@ -8,5 +8,5 @@ public class AvgAndKeyword {
 
     private String keyword;
 
-    private Double allScore;
+    private Integer allScore;
 }
