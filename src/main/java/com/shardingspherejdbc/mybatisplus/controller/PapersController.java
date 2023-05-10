@@ -6,6 +6,7 @@ import com.shardingspherejdbc.mybatisplus.dto.papers.GetMyPapersResultDto;
 import com.shardingspherejdbc.mybatisplus.dto.questions.QueryQuestionsResultDto;
 import com.shardingspherejdbc.mybatisplus.mapper.PapersMapper;
 import com.shardingspherejdbc.mybatisplus.mapper.QuestionsMapper;
+import com.shardingspherejdbc.mybatisplus.service.IKeywordsService;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,10 @@ import com.shardingspherejdbc.mybatisplus.service.IPapersService;
 import com.shardingspherejdbc.mybatisplus.entity.Papers;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -35,6 +39,8 @@ public class PapersController {
     @Autowired
     private PapersMapper papersMapper;
 
+    @Autowired
+    private IKeywordsService iKeywordsService;
 
 
     @GetMapping(value = "/list")
@@ -48,7 +54,23 @@ public class PapersController {
         Page<Papers> aPage = iPapersService.page(new Page<>(current, pageSize));
         return new ResponseEntity<>(aPage, HttpStatus.OK);
     }
+    public String getValue( String ids){
+        List<String> list = new ArrayList<>();
 
+        if(ids.contains("，") ){
+
+            list =  Arrays.asList(ids.split("，"));
+        } else {
+
+            list =  Arrays.asList(ids.split(","));
+        }
+        String collect = list.stream().map(i -> {
+            String keywords = iKeywordsService.getById(Integer.parseInt(i)).getKeywords();
+            return keywords;
+        }).collect(Collectors.joining(","));
+        return collect;
+
+    }
     @GetMapping(value = "/{id}")
     public ResponseEntity<Papers> getById(@PathVariable("id") String id) {
         return new ResponseEntity<>(iPapersService.getById(id), HttpStatus.OK);
@@ -63,7 +85,11 @@ public class PapersController {
     @GetMapping(value = "/queryQuestions")
     public ResponseEntity<List<QueryQuestionsResultDto>> queryQuestions(@RequestParam String testId){
         List<QueryQuestionsResultDto> list = papersMapper.queryQuestions(testId);
-        return new ResponseEntity<>(list,HttpStatus.OK);
+        List<QueryQuestionsResultDto> result = list.stream().map(ii -> {
+            ii.setKeywords(getValue(ii.getKeywords()));
+            return ii;
+        }).collect(Collectors.toList());
+        return new ResponseEntity<>(result,HttpStatus.OK);
 
     }
     @GetMapping(value = "/myErrors")

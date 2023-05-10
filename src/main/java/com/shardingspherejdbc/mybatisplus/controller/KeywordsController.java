@@ -41,24 +41,7 @@ public class KeywordsController {
         return new ResponseEntity<>(aPage, HttpStatus.OK);
     }
 
-    @GetMapping(value = "getValue")
-    public ResponseEntity<List<String>> getValue(@RequestParam String ids){
-        List<String> list = new ArrayList<>();
 
-        if(ids.contains("，") ){
-
-          list =  Arrays.asList(ids.split("，"));
-        } else {
-
-           list =  Arrays.asList(ids.split(","));
-        }
-        List<String> collect = list.stream().map(i -> {
-            String keywords = iKeywordsService.getById(Integer.parseInt(i)).getKeywords();
-            return keywords;
-        }).collect(Collectors.toList());
-        return new ResponseEntity<>(collect,HttpStatus.OK);
-
-    }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Keywords> getById(@PathVariable("id") String id) {
