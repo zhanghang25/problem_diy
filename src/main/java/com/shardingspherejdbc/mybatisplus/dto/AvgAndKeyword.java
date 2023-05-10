@@ -7,4 +7,6 @@ public class AvgAndKeyword {
     private Double avg;
 
     private String keyword;
+
+    private Double allScore;
 }
