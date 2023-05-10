@@ -88,6 +88,7 @@ public class QuestionsController {
 
         } else {
             questions.setDisorder(dto.getOrder());
+            questions.setOtherAnswer("无");
         }
         questions.setSource(dto.getSource());
         questions.setScore(dto.getScore());
@@ -113,6 +114,7 @@ public class QuestionsController {
 
         } else {
             questions.setDisorder(dto.getOrder());
+            questions.setOtherAnswer("无");
         }
         questions.setSource(dto.getSource());
         questions.setScore(dto.getScore());
